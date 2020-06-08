@@ -13,8 +13,8 @@ Then edit `k8s/deployment.yaml` `.spec.template.spec.containers[0].image` to ref
 Apply the Kubernetes manifests in `k8s` to your Docker for Mac cluster.
 
 ```sh
-kubernetes apply -f k8s/deployment.yaml
-kubernetes apply -f k8s/nginx-ingress-controller.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/nginx-ingress-controller.yaml
 ```
 
 The app has two endpoints which can be accessed at:
