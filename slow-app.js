@@ -1,3 +1,4 @@
+const http = require('http');
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
@@ -14,6 +15,11 @@ app.all('/slow/:ms?', (req, res, next) => {
   setTimeout(() => {
     res.send(`Heeeelllllooooo Woooooorld! from ${hostname}`);
   }, ms);
+});
+
+app.all('/status/:code', (req, res) => {
+  res.status(req.params.code)
+  res.send(http.STATUS_CODES[req.params.code])
 });
 
 app.get('/probe/ready', (req, res) => res.send(`Ready`));
