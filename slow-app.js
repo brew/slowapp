@@ -7,12 +7,14 @@ const hostname = process.env['HOSTNAME'] || 'no hostname';
 
 app.use(morgan('tiny'));
 
-app.get('/slow', (req, res, next) => {
+app.all('/', (req, res) => res.send(`Hello World! from ${hostname}`));
+
+app.all('/slow/:ms?', (req, res, next) => {
+  const ms = req.params.ms || delayResponse;
   setTimeout(() => {
     res.send(`Heeeelllllooooo Woooooorld! from ${hostname}`);
-  }, delayResponse);
+  }, ms);
 });
-app.get('/', (req, res) => res.send(`Hello World! from ${hostname}`));
 
 app.get('/probe/ready', (req, res) => res.send(`Ready`));
 
