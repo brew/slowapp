@@ -19,10 +19,25 @@ app.all('/slow/:ms?', (req, res, next) => {
 
 app.all('/status/:code', (req, res) => {
   res.status(req.params.code)
-  res.send(http.STATUS_CODES[req.params.code])
+  res.send(`Slowapp replies with: ${http.STATUS_CODES[req.params.code]}`)
 });
 
+app.all('/die', (req, res) => {
+  throw { message: 'died' }
+})
+
 app.get('/probe/ready', (req, res) => res.send(`Ready`));
+
+app.use((req, res, next) => {
+  const message = 'Page not found for slowapp';
+  res.status(404).send(message);
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('An internal error occurred for slowapp');
+});
+
 
 app.listen(port, () =>
   console.log(`App listening at http://localhost:${port}`)

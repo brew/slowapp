@@ -14,7 +14,7 @@ Apply the Kubernetes manifests in `k8s` to your Docker for Mac cluster.
 
 ```sh
 kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/nginx-ingress-controller.yaml
+helm upgrade -i my-ingctl ingress-nginx/ingress-nginx -f k8s/nginx-ingress-values.yaml -n ingress-nginx
 ```
 
 The app has two endpoints which can be accessed at:
@@ -106,3 +106,19 @@ In fact, if we reduce the replicas back to 1, and even remove the readiness prob
 - https://blog.sebastian-daschner.com/entries/zero-downtime-updates-kubernetes
 - https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 - https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+
+## Bonus features
+
+Slowapp does a couple more things useful for testing error pages and the like.
+
+### Status endpoint
+
+`/status/<status code>` will return a response with that status code, e.g. 404, 500, etc.
+
+### Server error endpoint
+
+You can cause an Internal Error by accessing `/die`.
+
+### Default backend
+
+The nginx ingress values also defines a default backend. We can use slowapp to test its response to various status conditions.
