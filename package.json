@@ -8,7 +8,7 @@
     "start:dev": "nodemon slow-app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Brook Elgie <specialbrew@gmail.com",
   "dependencies": {
     "express": "^4.17.1",
     "morgan": "^1.10.0",
