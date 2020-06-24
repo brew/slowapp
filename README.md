@@ -5,15 +5,15 @@ This is a demonstrator app (build with node/expressjs) and Kubernetes manifests 
 ## Build and install on Docker for Mac
 
 ```sh
-docker build -t slowapp:0.0.1 .
+docker build -t slowapp:0.0.1 ./node-src
 ```
 
-Then edit `k8s/deployment.yaml` `.spec.template.spec.containers[0].image` to reflect the image tag you gave it, e.g. `slowapp:0.0.1`.
+Then edit `k8s/node-deployment.yaml` `.spec.template.spec.containers[0].image` to reflect the image tag you gave it, e.g. `slowapp:0.0.1`.
 
 Apply the Kubernetes manifests in `k8s` to your Docker for Mac cluster.
 
 ```sh
-kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/node-deployment.yaml
 helm upgrade -i my-ingctl ingress-nginx/ingress-nginx -f k8s/nginx-ingress-values.yaml -n ingress-nginx
 ```
 
@@ -22,7 +22,7 @@ The app has two endpoints which can be accessed at:
 - http://slowapp.127.0.0.1.xip.io
 - http://slowapp.127.0.0.1.xip.io/slow
 
-/slow is delayed by whatever `SLOWAPP_DELAY` is set to in deployment.yaml (default is 5000 ms).
+/slow is delayed by whatever `SLOWAPP_DELAY` is set to in node-deployment.yaml (default is 5000 ms).
 
 We can send multiple requests to the app with [hey](https://github.com/rakyll/hey).
 
@@ -53,7 +53,7 @@ That's not good. They all failed.
 We'll add a `readinessProbe` to the deployment. Hopefully this will prevent the termination of old pods before new pods are ready.
 
 ```yaml
-# added to deployment.yaml
+# added to node-deployment.yaml
 readinessProbe:
   httpGet:
     path: /probe/ready

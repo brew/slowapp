@@ -2,10 +2,10 @@
   "name": "slowapp",
   "version": "1.0.0",
   "description": "Slow responses to an endpoint",
-  "main": "slow-app.js",
+  "main": "slowapp.js",
   "scripts": {
-    "start": "node slow-app.js",
-    "start:dev": "nodemon slow-app.js",
+    "start": "node slowapp.js",
+    "start:dev": "nodemon slowapp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brook Elgie <specialbrew@gmail.com",

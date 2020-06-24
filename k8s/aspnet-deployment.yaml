@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slowapp-dotnet
+  labels:
+    app: slowapp-dotnet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slowapp-dotnet
+  template:
+    metadata:
+      labels:
+        app: slowapp-dotnet
+    spec:
+      containers:
+        - name: slowapp-dotnet
+          image: slowapp:0.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: SLOWAPP_DELAY
+              value: '5000'
+
+          # lifecycle:
+          #   preStop:
+          #     exec:
+          #       command: ['/bin/sh', '-c', '/bin/sleep 10']
+
+          # readinessProbe:
+          #   httpGet:
+          #     path: /probe/ready
+          #     port: http
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: slowapp-dotnet
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: 1k
+    # nginx.ingress.kubernetes.io/proxy-connect-timeout: '10'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '10'
+    # nginx.ingress.kubernetes.io/proxy-send-timeout: '315'
+spec:
+  rules:
+    - host: slowapp-dotnet.127.0.0.1.xip.io
+      http:
+        paths:
+          - backend:
+              serviceName: slowapp-dotnet
+              servicePort: 3000
+            path: /
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: slowapp-dotnet
+spec:
+  selector:
+    app: slowapp-dotnet
+  ports:
+    - name: http
+      targetPort: http
+      protocol: TCP
+      port: 3000
