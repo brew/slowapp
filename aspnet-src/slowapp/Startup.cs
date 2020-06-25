@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -13,44 +9,45 @@ namespace slowapp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private void Log(string text) => Console.WriteLine($"{DateTime.UtcNow:dd/MM/yy HH:mm:ss}: {text}");
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime appLifetime)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            Log($"Application starting - Host: {Environment.MachineName}, Process ID: {Process.GetCurrentProcess().Id}");
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            appLifetime.ApplicationStarted.Register(ApplicationStarted);
+            appLifetime.ApplicationStopping.Register(ApplicationStopping);
+            appLifetime.ApplicationStopped.Register(ApplicationStopped);
 
+            app.UseMiddleware<RequestLogger>();
+            
             app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
+        }
+        
+        private void ApplicationStarted()
+        {
+            States.Running.SetState();
+            Log("ApplicationStarted called");
+        }
+        
+        private void ApplicationStopping()
+        {
+            States.AfterSigterm.SetState();
+            Log("ApplicationStopping called");
+        }
+
+        private void ApplicationStopped()
+        {
+            Log("ApplicationStopped called");
         }
     }
 }
