@@ -2,6 +2,12 @@
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
 
+### aspnet-src ###
+aspnet-src/slowapp/bin/**
+aspnet-src/slowapp/obj/**
+.idea
+.DS_Store
+
 ### Node ###
 # Logs
 logs
