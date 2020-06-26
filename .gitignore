@@ -6,7 +6,7 @@
 aspnet-src/slowapp/bin/**
 aspnet-src/slowapp/obj/
 aspnet-src/slowapp/Properties/**
-aspnet/.idea
+.idea
 .DS_Store
 
 ### Node ###

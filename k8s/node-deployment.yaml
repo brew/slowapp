@@ -37,7 +37,6 @@ spec:
               exec:
                 command: ['/bin/sh', '-c', '/bin/sleep 5']
 
-
           readinessProbe:
             httpGet:
               path: /probe/ready
