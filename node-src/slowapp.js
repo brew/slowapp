@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const app = express();
 const port = 3000;
 const delayResponse = process.env['SLOWAPP_DELAY'] || 0;
+const colour = process.env['COLOUR'] || 'beige';
+const colourStatus = parseInt(process.env['COLOUR_STATUS']) || 200;
 const hostname = process.env['HOSTNAME'] || 'no hostname';
 
 app.use(morgan('tiny'));
@@ -18,12 +20,20 @@ app.all('/slow/:ms?', (req, res, next) => {
 });
 
 app.all('/status/:code', (req, res) => {
-  res.status(req.params.code)
-  res.send(`Slowapp replies with: ${http.STATUS_CODES[req.params.code]}`)
+  res.status(req.params.code);
+  res.send(`Slowapp replies with: ${http.STATUS_CODES[req.params.code]}`);
 });
 
 app.all('/die', (req, res) => {
   throw { message: 'died' }
+})
+
+app.get('/colour', (req, res) => {
+  const ms = req.params.ms || delayResponse;
+  console.log(`Colour: ${colour}`);
+  setTimeout(() => {
+    res.status(colourStatus).send(colour);
+  }, ms);
 })
 
 app.get('/probe/ready', (req, res) => res.send(`Ready`));

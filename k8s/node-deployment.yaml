@@ -15,9 +15,10 @@ spec:
       labels:
         app: slowapp
     spec:
+      terminationGracePeriodSeconds: 5
       containers:
         - name: slowapp
-          image: slowapp:0.0.1
+          image: slowapp:0.0.9
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -25,17 +26,22 @@ spec:
               protocol: TCP
           env:
             - name: SLOWAPP_DELAY
-              value: '5000'
+              value: '7000'
+            - name: COLOUR
+              value: 'blue'
+            - name: COLOUR_STATUS
+              value: '201'
 
-          # lifecycle:
-          #   preStop:
-          #     exec:
-          #       command: ['/bin/sh', '-c', '/bin/sleep 10']
+          lifecycle:
+            preStop:
+              exec:
+                command: ['/bin/sh', '-c', '/bin/sleep 5']
 
-          # readinessProbe:
-          #   httpGet:
-          #     path: /probe/ready
-          #     port: http
+
+          readinessProbe:
+            httpGet:
+              path: /probe/ready
+              port: http
 
 ---
 apiVersion: networking.k8s.io/v1beta1

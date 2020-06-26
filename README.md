@@ -2,6 +2,12 @@
 
 This is a demonstrator app (build with node/expressjs) and Kubernetes manifests to deploy it, along with an nginx-ingress controller. The idea is to test what happens to pods that are restarted while requests are still in progress.
 
+---
+
+There's an ASP.NET version of this README... here: [README-ASPNET.md](README-ASPNET.md)
+
+---
+
 ## Build and install on Docker for Mac
 
 ```sh
