@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: slowapp-dotnet
+  name: slowapp-aspnet
   labels:
-    app: slowapp-dotnet
+    app: slowapp-aspnet
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: slowapp-dotnet
+      app: slowapp-aspnet
   template:
     metadata:
       labels:
-        app: slowapp-dotnet
+        app: slowapp-aspnet
     spec:
       containers:
-        - name: slowapp-dotnet
-          image: slowapp:0.0.1
+        - name: slowapp-aspnet
+          image: slowapp-aspnet:0.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -41,7 +41,7 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: slowapp-dotnet
+  name: slowapp-aspnet
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -51,11 +51,11 @@ metadata:
     # nginx.ingress.kubernetes.io/proxy-send-timeout: '315'
 spec:
   rules:
-    - host: slowapp-dotnet.127.0.0.1.xip.io
+    - host: slowapp-aspnet.127.0.0.1.xip.io
       http:
         paths:
           - backend:
-              serviceName: slowapp-dotnet
+              serviceName: slowapp-aspnet
               servicePort: 3000
             path: /
 
@@ -63,10 +63,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: slowapp-dotnet
+  name: slowapp-aspnet
 spec:
   selector:
-    app: slowapp-dotnet
+    app: slowapp-aspnet
   ports:
     - name: http
       targetPort: http
