@@ -43,16 +43,16 @@ We want to record what happens when we send requests for the duration of a rolli
 First, we send a request for a slow response with hey, while performing a rolling restart of the pod:
 
 ```sh
-hey -n 400 -c 100 http://slowapp-aspnet.127.0.0.1.xip.io/slow & sleep 1 \
-    && k rollout restart deploy slowapp-aspnet
+hey -n 400 -c 100 http://slowapp-aspnet.127.0.0.1.xip.io/slow/5000 & sleep 1 && k rollout restart deploy slowapp-aspnet -n dev
 
 ...
 
 Status code distribution:
-  [502] 400 responses
+  [200] 389 responses
+  [502] 11 responses
 ```
 
-That's not good. They all failed.
+Some failures :/
 
 ### Adding a readiness probe
 
@@ -62,17 +62,17 @@ We'll add a `readinessProbe` to the deployment. Hopefully this will prevent the 
 # added to aspnet-deployment.yaml
 readinessProbe:
   httpGet:
-    path: /probe/ready
+    path: /slow/0
     port: http
 ```
 
 ```sh
 Status code distribution:
-  [200] 100 responses
-  [502] 300 responses
+  [200] 393 responses
+  [502] 7 responses
 ```
 
-That's better, but not much. Some of those requests were successful.
+That's a little better. Still a small number of failures though.
 
 ### More replicas
 
@@ -80,13 +80,14 @@ Let's bump the replica count to 3.
 
 ```sh
 Status code distribution:
-  [200] 384 responses
-  [502] 16 responses
+  [200] 400 responses
 ```
 
-Nice, we've really reduced errors now.
+Nice, no errors.
 
 ### Add a preStop lifecycle hook
+
+What if we use a preStop lifecycle hook? And reset replicas back to 1, and remove the readinessProbe.
 
 This is a synchronous call to a process in the container that must complete before the pod terminates. We'll have it sleep for a short time to ensure all requests are finished.
 
@@ -104,7 +105,7 @@ Status code distribution:
 
 Very nice. All the 200s.
 
-In fact, if we reduce the replicas back to 1, and even remove the readiness probe, we still get 100% success. The lifecycle hook makes the biggest difference.
+In fact, if we reduce the replicas back to 1, and even remove the readiness probe, we still get 100% success. The lifecycle hook makes a big difference.
 
 #### References:
 
