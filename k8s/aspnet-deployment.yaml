@@ -21,11 +21,13 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 80
               protocol: TCP
           env:
-            - name: SLOWAPP_DELAY
-              value: '5000'
+            - name: ASPNETCORE_ENVIRONMENT
+              value: 'Development'
+            - name: DB_CONNSTRING_MYSQL
+              value: 'server=mysql; port=3306; database=mydb; username=dbuser; password=password; maximumpoolsize=100;'
 
           # lifecycle:
           #   preStop:
@@ -34,7 +36,7 @@ spec:
 
           # readinessProbe:
           #   httpGet:
-          #     path: /probe/ready
+          #     path: /slow/0
           #     port: http
 
 ---
@@ -46,8 +48,8 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-body-size: 1k
-    # nginx.ingress.kubernetes.io/proxy-connect-timeout: '10'
-    nginx.ingress.kubernetes.io/proxy-read-timeout: '10'
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '60'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '60'
     # nginx.ingress.kubernetes.io/proxy-send-timeout: '315'
 spec:
   rules:
@@ -56,7 +58,7 @@ spec:
         paths:
           - backend:
               serviceName: slowapp-aspnet
-              servicePort: 3000
+              servicePort: 80
             path: /
 
 ---
@@ -71,4 +73,4 @@ spec:
     - name: http
       targetPort: http
       protocol: TCP
-      port: 3000
+      port: 80

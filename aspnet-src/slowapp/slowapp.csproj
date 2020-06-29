@@ -50,8 +50,12 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
     </ItemGroup>
 
-    <ItemGroup>
+<!--     <ItemGroup>
       <PackageReference Include="MySql.Data" Version="8.0.20" />
+    </ItemGroup> -->
+
+    <ItemGroup>
+      <PackageReference Include="MySqlConnector" Version="0.61.0" />
     </ItemGroup>
 
 

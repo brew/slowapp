@@ -21,19 +21,20 @@ Apply the Kubernetes manifests in `k8s` to your Docker for Mac cluster.
 ```sh
 kubectl apply -f k8s/aspnet-deployment.yaml
 helm upgrade -i my-ingctl ingress-nginx/ingress-nginx -f k8s/nginx-ingress-values.yaml -n ingress-nginx
+helm upgrade -i mysql bitnami/mysql -f k8s/mysql-values.yaml -n dev
 ```
 
 The app has two endpoints which can be accessed at:
 
-- http://slowapp-aspnet.127.0.0.1.xip.io
-- http://slowapp-aspnet.127.0.0.1.xip.io/slow
+- http://slowapp-aspnet.127.0.0.1.xip.io/slow/{ms}
+- http://slowapp-aspnet.127.0.0.1.xip.io/slow/{sec}/db
 
 /slow is delayed by whatever `SLOWAPP_DELAY` is set to in aspnet-deployment.yaml (default is 5000 ms).
 
 We can send multiple requests to the app with [hey](https://github.com/rakyll/hey).
 
 ```sh
-hey -n 100 http://slowapp-aspnet.127.0.0.1.xip.io
+hey -n 100 http://slowapp-aspnet.127.0.0.1.xip.io/slow/0
 ```
 
 ## Towards zero downtime
