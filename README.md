@@ -5,6 +5,7 @@ This is a demonstrator app (build with node/expressjs) and Kubernetes manifests 
 ---
 
 There's an ASP.NET version of this README... here: [README-ASPNET.md](README-ASPNET.md)
+There's a short experiment using slowapp to help diagnose the 'cold-start' problem with the MySQL.Data connector package... here: [aspnet-with-database.md](aspnet-with-database.md).
 
 ---
 

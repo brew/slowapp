@@ -13,6 +13,11 @@ namespace slowapp
     {
         public static void Main(string[] args)
         {
+
+            // From https://github.com/aspnet/KestrelHttpServer/issues/2104
+            System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+            System.Threading.ThreadPool.GetMaxThreads(out int _, out int completionThreads);
+            System.Threading.ThreadPool.SetMinThreads(1024, completionThreads);
             CreateHostBuilder(args).Build().Run();
         }
 

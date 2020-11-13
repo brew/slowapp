@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slowapp", "slowapp\slowapp.csproj", "{723364F7-C980-4E08-9041-F2970F33F708}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slowapp", "slowapp.csproj", "{723364F7-C980-4E08-9041-F2970F33F708}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
