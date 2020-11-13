@@ -1,4 +1,6 @@
-We created a slowapp to experiment with startup of pods. We used the asp.net version of the app to play with slow database connections using sync/async database connections and the [MySQL.Data](https://dev.mysql.com/doc/connector-net) and [MySqlConnector](https://mysqlconnector.net/) packages. We also changed the thread pool settings for the app.
+We noticed connection problems when deploying pods for our asp.net apps to production. So we created a [slowapp](https://github.com/brew/slowapp/) to experiment with the startup of pods in kubernetes.
+
+We used the asp.net version of the slowapp to help diagnose these issues by investigating slow database connections, using sync/async database connections and the [MySQL.Data](https://dev.mysql.com/doc/connector-net) and [MySqlConnector](https://mysqlconnector.net/) packages. We also changed the thread pool settings for the app.
 
 ## A slow database connection
 
