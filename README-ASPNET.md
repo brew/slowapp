@@ -4,9 +4,8 @@ This is a demonstrator app (build with ASP.NET) and Kubernetes manifests to depl
 
 ---
 
-There's a node version of this README... here: [README.md](README.md)
-There's an ASP.NET with MySQL database version... here: [README-ASPNET-DB.md](README-ASPNET-DB.md)
-There's a short experiment using slowapp to help diagnose the 'cold-start' problem with the MySQL.Data connector package... here: [aspnet-with-database.md](aspnet-with-database.md).
+- There's a node version of this README... here: [README.md](README.md)
+- There's a short experiment using slowapp to help diagnose the 'cold-start' problem with the MySQL.Data connector package... here: [aspnet-with-database.md](aspnet-with-database.md).
 
 ---
 
