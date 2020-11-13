@@ -119,13 +119,13 @@ What about async? If we change the endpoint to use async connection how does tha
 
 What about changing the thread pool for the server?
 
-```asp
+```csharp
   public static void Main(string[] args)
   {
       // From https://github.com/aspnet/KestrelHttpServer/issues/2104
-      System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+      System.Net.ServicePointManager.DefaultConnectionLimit = 200;
       System.Threading.ThreadPool.GetMaxThreads(out int _, out int completionThreads);
-      System.Threading.ThreadPool.SetMinThreads(1024, completionThreads);
+      System.Threading.ThreadPool.SetMinThreads(500, completionThreads);
       CreateHostBuilder(args).Build().Run();
   }
 ```
